@@ -14,6 +14,7 @@ public class PlayerScr : MonoBehaviour {
     const float k_GroundedRadius = .2f;
     private bool m_FacingRight = true;
     private float mySpeed = 0;
+    public int gameSide = 0;
 
 
 
@@ -39,7 +40,13 @@ public class PlayerScr : MonoBehaviour {
     {
         if(isGrounded)
         {
-            rb.AddForce(new Vector2(0, jumpPower));
+            if (gameSide == 0)
+                rb.AddForce(new Vector2(0, jumpPower));
+            else if (gameSide == 1)
+            {
+                rb.AddForce(new Vector2(-jumpPower, 0));
+            }
+            
         }
     }
 	
@@ -55,10 +62,13 @@ public class PlayerScr : MonoBehaviour {
         }
 
 
-        keyboardMove();
+        //keyboardMove();
         if(mySpeed != 0)
         {
-            rb.velocity = new Vector2(mySpeed, rb.velocity.y);
+            if(gameSide == 0)
+                rb.velocity = new Vector2(mySpeed, rb.velocity.y);
+            else if(gameSide == 1)
+                rb.velocity = new Vector2(rb.velocity.x, mySpeed);
         }
 
 
@@ -84,7 +94,12 @@ public class PlayerScr : MonoBehaviour {
     public void goStop()
     {
         mySpeed = 0;
-        rb.velocity = new Vector2(0, rb.velocity.y);
+        if (gameSide == 0)
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        else if (gameSide == 1)
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+
+
     }
 
 
@@ -97,6 +112,8 @@ public class PlayerScr : MonoBehaviour {
 
     private void keyboardMove()
     {
+        if (gameSide != 0)
+            return;
         if (Input.GetKey(KeyCode.W))
         {
             if (isW)

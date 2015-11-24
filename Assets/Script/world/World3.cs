@@ -15,8 +15,11 @@ public class World3 : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        //str = Input.acceleration.ToString();
-        //mainText.text = str;
+         str = Input.acceleration.ToString();
+         mainText.text = str;
+        if ( (flag && Input.acceleration.x >= 0.8f) || (!flag && Input.acceleration.y <= -0.8f) )
+            turnGame();
+
     }
 
     public void turnGame()
@@ -25,11 +28,13 @@ public class World3 : MonoBehaviour {
         {
             Physics2D.gravity = new Vector2(9.81f, 0);
             PlayerScr.instance.transform.rotation = new Quaternion(0, 0, 1, 1);
+            PlayerScr.instance.gameSide = 1;
         }
         else
         {
             Physics2D.gravity = new Vector2(0, -9.81f);
             PlayerScr.instance.transform.rotation = new Quaternion(0, 0, 0, 0);
+            PlayerScr.instance.gameSide = 0;
         }
         flag = !flag;
     }
