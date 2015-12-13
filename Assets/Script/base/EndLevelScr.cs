@@ -3,9 +3,11 @@ using System.Collections;
 
 public class EndLevelScr : MonoBehaviour {
 
-    public int id;
+    public static Vector2 lastPos;
+    public string nextLevel;
 	// Use this for initialization
 	void Start () {
+        //print(Application.loadedLevelName);
 	
 	}
 
@@ -13,8 +15,6 @@ public class EndLevelScr : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            //gameObject.SetActive(false);
-            //CameraScr.instance.moveTo(true);
             loadNext();
         }
     }
@@ -22,6 +22,7 @@ public class EndLevelScr : MonoBehaviour {
 
     public void loadNext()
     {
-        Application.LoadLevel(Application.loadedLevel + 1);
+        lastPos = PlayerScr.instance.transform.position;
+        Application.LoadLevel(nextLevel);
     }
 }

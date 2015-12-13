@@ -5,7 +5,7 @@ public class CameraScr : MonoBehaviour {
 
     public static CameraScr instance;
 
-
+    public bool fewScreens = false;
     public float speed = 10;
     public float needWidth = 9f;
     public Vector2 offset;
@@ -18,11 +18,13 @@ public class CameraScr : MonoBehaviour {
     private bool startToMove = false;
     private Vector3 vec = new Vector3(0,0,-10);
     private float tY;
+    private int cameraPos;
 	// Use this for initialization
 	void Awake () {
         tr = GetComponent<Transform>();
         instance = this;
-        
+        Camera.main.orthographicSize = needWidth / Screen.width * Screen.height;
+        cameraPos = 0;
     }
 
     void Start()
@@ -33,10 +35,15 @@ public class CameraScr : MonoBehaviour {
 	// Update is called once per frame
 	void LateUpdate () {
 
-        Camera.main.orthographicSize = needWidth / Screen.width * Screen.height;
 
-
-
+        if(fewScreens)
+        {
+            if((int)(trPlayer.position.x+8)/16 != cameraPos)
+            {
+                cameraPos = (int)(trPlayer.position.x + 8) / 16;
+                transform.position = new Vector3(cameraPos * 16, 0, -10);
+            }
+        }
 
 
         //moveCamera();

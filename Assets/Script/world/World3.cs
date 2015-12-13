@@ -17,7 +17,11 @@ public class World3 : MonoBehaviour {
 	void Update () {
          str = Input.acceleration.ToString();
          mainText.text = str;
-        if ( (flag && Input.acceleration.x >= 0.8f) || (!flag && Input.acceleration.y <= -0.8f) )
+        //if ( (flag && Input.acceleration.x >= 0.8f) || (!flag && Input.acceleration.y <= -0.8f) )
+        if (flag && Input.acceleration.x >= 0.8f)
+            turnGame();
+
+        if (Input.GetKeyDown(KeyCode.Space))
             turnGame();
 
     }
@@ -29,19 +33,13 @@ public class World3 : MonoBehaviour {
             Physics2D.gravity = new Vector2(9.81f, 0);
             PlayerScr.instance.transform.rotation = new Quaternion(0, 0, 1, 1);
             PlayerScr.instance.gameSide = 1;
+            MyConst.isGravity = 1;
         }
-        else
-        {
-            Physics2D.gravity = new Vector2(0, -9.81f);
-            PlayerScr.instance.transform.rotation = new Quaternion(0, 0, 0, 0);
-            PlayerScr.instance.gameSide = 0;
-        }
-        flag = !flag;
     }
 
     void OnDestroy()
     {
-        Physics2D.gravity = new Vector2(0, -9.81f);
+        //Physics2D.gravity = new Vector2(0, -9.81f);
     }
 
 

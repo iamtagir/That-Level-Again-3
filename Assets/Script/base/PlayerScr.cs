@@ -6,8 +6,13 @@ public class PlayerScr : MonoBehaviour {
     public static PlayerScr instance;
     public float speed, jumpPower;
 
+    public GameObject corpse;
+    public GameObject myKey;
+
+
+
     private Transform tr;
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     public bool isGrounded;
     private Transform m_GroundCheck;
@@ -15,16 +20,16 @@ public class PlayerScr : MonoBehaviour {
     private bool m_FacingRight = true;
     private float mySpeed = 0;
     public int gameSide = 0;
-
-
-
+    private float maxSpeed = 9f;
+    private bool key = false;
     private bool isW = true;//for keyboard
+
     void Awake()
     {
         if (instance == null)
             instance = this;
         tr = GetComponent<Transform>();
-        rb = GetComponent<Rigidbody2D>();
+        //rb = GetComponent<Rigidbody2D>();
         isGrounded = false;
         m_GroundCheck = transform.Find("GroundCheck");
     }
@@ -46,9 +51,9 @@ public class PlayerScr : MonoBehaviour {
             {
                 rb.AddForce(new Vector2(-jumpPower, 0));
             }
-            
         }
     }
+
 	
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -71,6 +76,11 @@ public class PlayerScr : MonoBehaviour {
                 rb.velocity = new Vector2(rb.velocity.x, mySpeed);
         }
 
+        if (rb.velocity.x > maxSpeed)
+            rb.velocity = new Vector2(maxSpeed, rb.velocity.y);
+
+
+
 
     }
 
@@ -91,6 +101,9 @@ public class PlayerScr : MonoBehaviour {
         jump();
     }
 
+
+
+
     public void goStop()
     {
         mySpeed = 0;
@@ -98,8 +111,12 @@ public class PlayerScr : MonoBehaviour {
             rb.velocity = new Vector2(0, rb.velocity.y);
         else if (gameSide == 1)
             rb.velocity = new Vector2(rb.velocity.x, 0);
+    }
 
-
+    public void die()
+    {
+        corpse.SetActive(true);
+        corpse.transform.position = transform.position;
     }
 
 
@@ -107,6 +124,23 @@ public class PlayerScr : MonoBehaviour {
     void Update()
     {
 
+    }
+
+    public void getKey()
+    {
+        key = true;
+        myKey.SetActive(true);
+    }
+
+    public void removeKey()
+    {
+        key = false;
+        myKey.SetActive(false);
+    }
+
+    public bool isKey()
+    {
+        return key;
     }
 
 
@@ -142,7 +176,7 @@ public class PlayerScr : MonoBehaviour {
     }
 
 
-    private void Flip()
+    public void Flip()
     {
         // Switch the way the player is labelled as facing.
         m_FacingRight = !m_FacingRight;
@@ -153,4 +187,34 @@ public class PlayerScr : MonoBehaviour {
         transform.localScale = theScale;
     }
 
+    
+    public void Set(float x, float y)
+    {
+        tr.position = new Vector3(x, y, 0);
+    }
+
+    public void SetX(float x)
+    {
+        tr.position = new Vector3(x, tr.position.y, 0);
+    }
+
+    public void SetY(float y)
+    {
+        tr.position = new Vector3(tr.position.x, y, 0);
+    }
+
+    public void turnTo(int side)
+    {
+        gameSide = side;
+        if (side == 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+    }
+
+
+    public void resetSpeed()
+    {
+        rb.velocity = new Vector2(0, 0);
+    }
 }
